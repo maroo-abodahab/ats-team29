@@ -1,0 +1,47 @@
+# ATS local cloud: Floci (a free copy of AWS on your laptop, https://floci.io)
+# plus a Postgres container that stands in for Neon during development.
+#   Start:    docker compose -f infra/floci/docker-compose.yml up -d
+#   Console:  http://localhost:4566/_floci/ui   (Floci Dash, looks like the AWS Console)
+#   Stop:     docker compose -f infra/floci/docker-compose.yml down   (your data is kept)
+name: ats-floci
+
+services:
+  floci:
+    image: floci/floci:latest
+    container_name: floci
+    ports:
+      - "127.0.0.1:4566:4566"                  # only your own PC can reach Floci
+    environment:
+      FLOCI_HOSTNAME: floci
+      FLOCI_STORAGE_MODE: persistent           # keep tables and functions after a restart
+      FLOCI_STORAGE_PERSISTENT_PATH: /app/data
+      FLOCI_SERVICES_UI_BIND_ADDRESS: "127.0.0.1"
+      # Use Floci Dash (AWS-Console style) as the web console
+      FLOCI_BASE_URL: http://floci:4566
+      FLOCI_SERVICES_UI_IMAGE: ghcr.io/ofsazib/floci-dash:latest
+      FLOCI_SERVICES_UI_CONTAINER_NAME: floci-dash
+      FLOCI_SERVICES_UI_ENDPOINT_ENV: FLOCI_URL
+      FLOCI_SERVICES_UI_STATUS_PATH: /api/healthz
+    extra_hosts:
+      - "host.docker.internal:host-gateway"     # lets SNS call your PC (Linux/macOS; built in on Docker Desktop for Windows)
+    volumes:
+      - floci-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock   # lets Floci run Lambda functions
+
+  # Local stand-in for Neon Postgres (jobs service) until a Neon URL is configured.
+  # Password comes from infra/.secrets.local (git-ignored), never from this file.
+  ats-postgres:
+    image: postgres:17-alpine
+    container_name: ats-postgres
+    environment:
+      POSTGRES_DB: ats_jobs
+      POSTGRES_USER: ats_app
+      POSTGRES_PASSWORD: ${LOCAL_PG_PASSWORD:?run infra/setup-floci.sh, it creates infra/.secrets.local}
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - ats-pgdata:/var/lib/postgresql/data
+
+volumes:
+  floci-data:
+  ats-pgdata:
