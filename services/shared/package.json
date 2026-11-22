@@ -1,0 +1,16 @@
+{
+  "name": "@ats/shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared building blocks used by every ATS service: auth, logging, errors, validation, secrets, service-to-service calls.",
+  "main": "src/index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "serverless-http": "^3.2.0"
+  },
+  "peerDependencies": {
+    "express": "^5.1.0"
+  }
+}
