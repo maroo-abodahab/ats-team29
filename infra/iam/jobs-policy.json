@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "UsersTableOnly",
+      "Effect": "Allow",
+      "Action": ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:Query", "dynamodb:Scan", "dynamodb:ConditionCheckItem"],
+      "Resource": ["arn:aws:dynamodb:${REGION}:${ACCOUNT}:table/AtsUsers", "arn:aws:dynamodb:${REGION}:${ACCOUNT}:table/AtsUsers/index/*"]
+    },
+    {
+      "Sid": "ReadOwnSecretsOnly",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": ["arn:aws:secretsmanager:${REGION}:${ACCOUNT}:secret:ats/auth*", "arn:aws:secretsmanager:${REGION}:${ACCOUNT}:secret:ats/jobs-db*"]
+    },
+    {
+      "Sid": "CallOtherServicesForAnalyticsAndUnpublish",
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": ["arn:aws:lambda:${REGION}:${ACCOUNT}:function:ats-candidates-service", "arn:aws:lambda:${REGION}:${ACCOUNT}:function:ats-pipeline-service"]
+    },
+    {
+      "Sid": "OwnLogGroupOnly",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:${REGION}:${ACCOUNT}:log-group:/aws/lambda/ats-jobs-service:*"
+    }
+  ]
+}
