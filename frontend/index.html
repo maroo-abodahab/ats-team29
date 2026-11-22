@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>TalentFlow ATS</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/jobs"><span class="brand-mark">TF</span> TalentFlow <small>ATS</small></a>
+    <nav id="nav" class="nav" aria-label="Main navigation"></nav>
+    <div id="session" class="session"></div>
+  </header>
+
+  <main id="view" class="container" tabindex="-1">
+    <p class="muted">Loading…</p>
+  </main>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <footer class="footer">
+    <span id="api-status" class="muted">Checking API…</span>
+    <span class="muted">Team 29 · Cloud Computing &amp; Cloud Security</span>
+  </footer>
+
+  <!-- Order matters: shared helpers first, then one file per service owner, then the router -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>        <!-- shared identity (Marwan) -->
+  <script src="js/jobs.js"></script>        <!-- Job Management (Marwan) -->
+  <script src="js/analytics.js"></script>   <!-- Hiring Analytics (Marwan) -->
+  <script src="js/candidates.js"></script>  <!-- Candidates & Applications (Laila) -->
+  <script src="js/pipeline.js"></script>    <!-- Recruitment Pipeline (May) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
