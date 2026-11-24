@@ -9,9 +9,9 @@ if [ ! -f "$SECRETS_FILE" ]; then
   {
     echo "# Local secrets for the ATS deployment. This file is git-ignored: NEVER commit it."
     echo "# Fill these in, then run: bash infra/services/00-secrets.sh"
-    echo "NEON_DATABASE_URL="
-    echo "BREVO_API_KEY="
-    echo "BREVO_SENDER_EMAIL="
+    echo "NEON_DATABASE_URL=''"
+    echo "BREVO_API_KEY=''"
+    echo "BREVO_SENDER_EMAIL=''"
     echo "BREVO_SENDER_NAME=\"ATS Recruitment\""
     echo "# Generated automatically: password of the local Postgres stand-in for Neon"
     echo "LOCAL_PG_PASSWORD=$PG_PW"
