@@ -1,0 +1,45 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CandidateAndApplicationTablesOnly",
+      "Effect": "Allow",
+      "Action": ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:Query"],
+      "Resource": [
+        "arn:aws:dynamodb:${REGION}:${ACCOUNT}:table/AtsCandidates",
+        "arn:aws:dynamodb:${REGION}:${ACCOUNT}:table/AtsApplications",
+        "arn:aws:dynamodb:${REGION}:${ACCOUNT}:table/AtsApplications/index/*"
+      ]
+    },
+    {
+      "Sid": "CvObjectsOnlyNoListNoBucketAdmin",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
+      "Resource": "arn:aws:s3:::${CV_BUCKET}/cvs/*"
+    },
+    {
+      "Sid": "SendApplicationEventsOnly",
+      "Effect": "Allow",
+      "Action": ["sqs:SendMessage", "sqs:GetQueueUrl"],
+      "Resource": "arn:aws:sqs:${REGION}:${ACCOUNT}:ats-application-events"
+    },
+    {
+      "Sid": "ReadAuthSecretOnly",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "arn:aws:secretsmanager:${REGION}:${ACCOUNT}:secret:ats/auth*"
+    },
+    {
+      "Sid": "CallJobsAndPipeline",
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": ["arn:aws:lambda:${REGION}:${ACCOUNT}:function:ats-jobs-service", "arn:aws:lambda:${REGION}:${ACCOUNT}:function:ats-pipeline-service"]
+    },
+    {
+      "Sid": "OwnLogGroupOnly",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:${REGION}:${ACCOUNT}:log-group:/aws/lambda/ats-candidates-service:*"
+    }
+  ]
+}
